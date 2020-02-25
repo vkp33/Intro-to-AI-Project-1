@@ -1,20 +1,39 @@
 package aiproj;
+import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	   @Override
+	   public void start(Stage primaryStage) throws Exception {  
+	 
+	  FXMLLoader loader = new FXMLLoader();
+	    loader.setLocation(getClass().getResource("hellofx.fxml"));
+	   
+	    AnchorPane root = (AnchorPane)loader.load();
+	   
+	    Controller loginview = loader.getController();
+	       loginview.start(primaryStage);
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("hellofx.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 400, 300));
-        primaryStage.show();
-    }
+	    Scene scene = new Scene(root);
+	    primaryStage.setScene(scene);
+	    primaryStage.setTitle("Create Grid");
+	    primaryStage.show();
+	       
+
+	   
+	   }
 
 
     public static void main(String[] args) {
@@ -25,8 +44,6 @@ public class Main extends Application {
     	System.out.println();
     	puzzle.BFSall();
     	puzzle.HillClimbing(10);
-    	
-    	
-        //launch(args);
+    	launch(args);
     }
 }
