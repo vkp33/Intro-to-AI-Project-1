@@ -1,4 +1,5 @@
 package aiproj;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,15 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+    	Node current = null;
+    	PathingPuzzle puzzle = new PathingPuzzle(5);
+    	current = puzzle.tree.root;
+    	puzzle.decisionTree(puzzle.tree.root);
+    	System.out.println();
+    	puzzle.BFSall();
+    	puzzle.HillClimbing(10);
+    	
+    	
+        //launch(args);
     }
 }
