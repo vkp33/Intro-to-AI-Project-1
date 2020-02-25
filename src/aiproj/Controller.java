@@ -1,10 +1,12 @@
 package aiproj;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.TextInputDialog;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,17 +46,23 @@ this.primaryStage = primaryStage;
    
 @FXML
     void submit(ActionEvent event) throws ClassNotFoundException {
-    System.out.println("Button Clicked");
     int size = Integer.parseInt(gridsize.getText());
    
-    GridPane gridPane = new GridPane();    
+    GridPane gridPane = new GridPane(); 
+    
+    aiproj.Node current = null;
+	PathingPuzzle puzzle = new PathingPuzzle(size);
+	current = puzzle.tree.root;
+	
          
          Text[][] cells = new Text[(size*2)+1][size];
          
          for (int i=0; i<size;i++) {
          for (int j=0;j<size;j++) {
-         Random rand = new Random();
-         int value = rand.nextInt(size-1)+1;
+
+         int value = puzzle.puzzle[i][j]; 
+         puzzle.decisionTree(current);
+         
          cells[i][j] = new Text(value+"");
          gridPane.add(cells[i][j], i, j);
         // gridPane.setHgrow(cells[i][j], Priority.ALWAYS);
@@ -100,10 +108,13 @@ this.primaryStage = primaryStage;
 @Override
 public void handle(ActionEvent arg0) {
 // TODO Auto-generated method stub
+	
+	puzzle.BFSall();
 for (int i = 0; i<size; i++) {
 for (int j=0; j<size; j++) {
+	int value = puzzle.BFSpuzzle[i][j] ;
 gridPane.getChildren().remove(cells[size+i+1][j]);
-cells[size+i+1][j] = new Text("BFS");
+cells[size+i+1][j] = new Text(value+"");
 gridPane.add(cells[size+i+1][j], i+size+1, j);
          gridPane.setHalignment(cells[i+size+1][j], HPos.CENTER);
          gridPane.setMargin(cells[i+size+1][j], new Insets(10,10,10,10));
@@ -132,18 +143,43 @@ gridPane.add(cells[size+i+1][j], i+size+1, j);
            
            });
          
+         TextInputDialog dialog = new TextInputDialog("");
+         dialog.setTitle("Hill Climber");
+   	  dialog.setHeaderText("Enter an integer:");
+   	  dialog.setContentText("Integer");
+   	  
          climberbtn.setOnAction(new EventHandler<ActionEvent>() {
 
   @Override
   public void handle(ActionEvent arg0) {
   // TODO Auto-generated method stub
+	  
+	   
+	  Optional<String> result = dialog.showAndWait();
+	   Integer number = Integer.valueOf(result.get());
+	   puzzle.HillClimbing(number);
+	   
+	   for (int i = 0; i<size; i++) {
+		   for (int j=0; j<size; j++) {
+			   int value = puzzle.puzzle[i][j];
+		   gridPane.getChildren().remove(cells[i][j]);
+		   cells[i][j] = new Text(value+"");
+		   gridPane.add(cells[i][j], i, j);
+		            gridPane.setHalignment(cells[i][j], HPos.CENTER);
+		            gridPane.setMargin(cells[i][j], new Insets(10,10,10,10));
+		            
+		   }
+		   }
+	   
   for (int i = 0; i<size; i++) {
   for (int j=0; j<size; j++) {
+	  int value = puzzle.BFSpuzzle[i][j]; 
   gridPane.getChildren().remove(cells[size+i+1][j]);
-  cells[size+i+1][j] = new Text("C");
+  cells[size+i+1][j] = new Text(value+"");
   gridPane.add(cells[size+i+1][j], i+size+1, j);
            gridPane.setHalignment(cells[i+size+1][j], HPos.CENTER);
            gridPane.setMargin(cells[i+size+1][j], new Insets(10,10,10,10));
+           
   }
   }
  
